@@ -1,9 +1,27 @@
 import Mongo from '../../libs/Mongo';
+import userModel from "../../models/users";
+import projectsModel from "../../models/project";
+
+const actions = {
+    async getAllUsers() {
+        return  await userModel.aggregate([
+            {
+                $lookup: {
+                    from: "projects",
+                    localField: "_id",
+                    foreignField: "users_id",
+                    as: "projects"
+                },
+            },
+        ])
+    },
+}
 
 export default async function(req, res) {
-    const db = new Mongo();
+    new Mongo();
+    const user = await actions.getAllUsers();
 
-    res.json({
-        user: await db.getAllUsers()
+    return res.json({
+        user,
     });
 }

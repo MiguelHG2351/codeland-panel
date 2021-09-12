@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import config from "../config/index";
-import { user } from "../models/users";
 
 const userDB = process.env.MONGO_USER;
 const password = process.env.MONGO_PASSWORD;
@@ -17,12 +16,6 @@ class MongoLib {
                 useUnifiedTopology: true
             });
         }
-    }
-
-    getAllUsers() {
-        return this.connection.then(() => {
-            return user.find().exec();
-        });
     }
 }
 
