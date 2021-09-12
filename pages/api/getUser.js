@@ -31,7 +31,6 @@ const actions = {
 export default async function(req, res) {
     new Mongo();
     const user = await actions.getAllUsers();
-    console.log(user);
 
     return res.json({
         user,
