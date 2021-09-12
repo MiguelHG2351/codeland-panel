@@ -1,7 +1,16 @@
 import Head from "next/head";
-import config from "config";
+import { useState, useEffect } from "react";
 
-export default function Home({ data }) {
+export default function Home() {
+    const [data, setData] = useState({ user: [] });
+
+    useEffect(async () => {
+        const response = await fetch('/api/getUser')
+        const datos = await response.json();
+        setData(datos);
+        console.log(data)
+    }, []);
+
     return (
         <>
             <Head>
@@ -22,6 +31,7 @@ export default function Home({ data }) {
                             src={item.cover}
                             className="cover absolute top-0 left-0 w-full h-full z-1- object-cover"
                             alt={item.username}
+                            loading="lazy"
                         />
                         <div className="user-action text-white p-3 w-full bg-purple-700">
                             <h2>{item.username}</h2>
@@ -32,24 +42,4 @@ export default function Home({ data }) {
             </div>
         </>
     );
-}
-
-export async function getStaticProps() {
-    //get current route
-
-    // const fetchig = await fetch('https://api.github.com/users/mike-b-miller');
-    const URI = `${
-        config.isDevelopment
-            ? "http://localhost:3000"
-            : "https://codeland-panel.vercel.app"
-    }/api/getUser`;
-
-    const fetching = await fetch(URI);
-    const data = await fetching.json();
-
-    return {
-        props: {
-            data,
-        },
-    };
 }
