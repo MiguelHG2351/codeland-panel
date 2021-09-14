@@ -1,33 +1,40 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 import styles from '../styles'
 
 export default function Home() {
     const [data, setData] = useState({ user: [] });
     const [renderData, setRenderData] = useState({ user: [] });
+    const router = useRouter();
 
     useEffect(async () => {
-        const response = await fetch('/api/getUser')
+        const response = await fetch('/api/getUsers')
         const datos = await response.json();
+
         setData(datos);
         setRenderData(datos);
-        console.log(data)
     }, []);
 
     function fullScreenImage(e) {
         const beforeChild = e.target.previousSibling;
         e.stopPropagation();
-        console.log(e.target.parentNode)
         beforeChild.requestFullscreen().then(() => {
             console.log('fullscreen')
         }).catch(err => {
             console.log(err)
-            })
+        })
     }
 
     function findUser(e) {
         setRenderData({ user: data.user.filter(user => user.username.includes(e.target.value)) })
+    }
+
+    function openProfile(e) {
+        const userID = e.target.dataset.id
+        const URL = `/user/${userID}`	
+        router.push(URL)
     }
 
     return (
@@ -41,7 +48,7 @@ export default function Home() {
                 />
             </Head>
             <main className="w-11/12 m-auto mt-5">
-                <input type="text" className="outline-none p-2" onChange={findUser} placeholder="Buscar usuario" />
+                <input type="text" className="outline-none p-2 rounded-md" onChange={findUser} placeholder="Buscar usuario" />
                 <div className="sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
                     {renderData.user.map((item, index) => (
                         <div
@@ -62,11 +69,11 @@ export default function Home() {
                             <div className="user-action flex justify-between items-center text-white p-3 w-full bg-purple-700">
                                 <div className="user-info">
                                     <h2>{item.username}</h2>
-                                    <p>Projectos: {item.projects.length}</p>
+                                    <p>Projectos: {item.projects[0].length}</p>
                                     <p>Ingreso: {new Date(item.created_at).toLocaleString("es-es", { weekday: "short", day: 'numeric', month: 'short' })}</p>
                                 </div>
                                 <div className="user-profile">
-                                    <button className="p-2 bg-green-600 rounded-md">Editar</button>
+                                    <button onClick={openProfile} data-id={item._id} className="p-2 bg-green-600 rounded-md">Editar</button>
                                 </div>
                             </div>
                         </div>

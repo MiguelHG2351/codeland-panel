@@ -1,7 +1,10 @@
 import css from 'styled-jsx/css'
 
 export default css`
-    .show-image {
-/*  */
+    @media screen and (min-width: 648px) {
+        .user-cards {
+            /*  */
+        }
     }
+
 `
