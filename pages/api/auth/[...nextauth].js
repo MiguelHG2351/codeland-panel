@@ -2,39 +2,10 @@ import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 import jwt from "jsonwebtoken";
 
+// console.log(process.env.JWT_SECRET);
 const options = {
     theme: 'dark',
     debug: true,
-    session: {
-        jwt: true,
-    },
-    secret: process.env.JWT_SECRET,
-    jwt: {
-        secret: process.env.JWT_SECRET,
-        encryption: true,
-        enconde: async ({ secret, token, maxAge }) => {
-            const jwtClaims = {
-                'sub': token.sub.toString(),
-                name: token.name,
-                email: token.email,
-                "iat": Date.now() / 1000,
-            }
-
-            const encodedToken = jwt.sign(jwtClaims , secret, {
-                algorithm: 'HS256',
-             })
-
-            return encodedToken;
-        },
-
-        async decode({ secret, token }) {
-            const decoded = jwt.verify(token, { secret }, {
-                algorithms: ['HS256'],
-            });
-
-            return decoded;
-        }
-    },
     providers: [
         Providers.Credentials({
             name: 'Codeland',
@@ -61,21 +32,51 @@ const options = {
             }
         })
     ],
-    callbacks: {
-        async session(session, token) {
-            const encodedToken = jwt.sign(token, process.env.JWT_SECRET, {
+    session: {
+        jwt: true,
+    },
+    
+    jwt: {
+        secret: process.env.JWT_SECRET,
+        encryption: true,
+        verificationOptions: {
+            algorithms: ['HS256']
+         },
+        encode: async ({ secret, token }) => {
+            console.log(secret, token);
+            const jwtClaims = {
+                name: token.name,
+                email: token.email,
+                "iat": Date.now() / 1000,
+            }
+
+            const encodedToken = jwt.sign(jwtClaims , secret, {
                 algorithm: 'HS256',
                 expiresIn: '1h'
-            })
-            session.id = token.id
-            session.token = encodedToken
-            return Promise.resolve(session)
+             })
+            return encodedToken;
+        },
+
+        async decode({ secret, token }) {
+            const decoded = jwt.verify(token, secret, {
+                algorithms: ['HS256'],
+            });
+            return decoded;
+        }
+    },
+    callbacks: {
+        async session(session, token) {
+            // console.log(session, token);
+            return await Promise.resolve(session)
         },
 
         async jwt(token, user) {
-            const isUserSignedIn = user ? true: false;
-
-            return Promise.resolve(token)
+            // const isUserSignedIn = user ? true: false;
+            if(user) {
+                return user;
+            }
+            console.log(user)
+            return await Promise.resolve(token)
         }
     }
 }

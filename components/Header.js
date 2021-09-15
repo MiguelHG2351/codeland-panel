@@ -1,13 +1,15 @@
 import Link from "next/link";
 import { useState, useRef } from "react";
+import { useSession, signOut } from "next-auth/client";
 
 const Header = () => {
     const [menu, setMenu] = useState(false);
     const overlay = useRef(null);
+    const [session, loading] = useSession();
 
     function handleOpenMenu() {
         setMenu(!menu);
-        overlay.current.classList.remove("hidden");
+        overlay.current.classList.toggle("hidden");
     }
     
     function closeMenu() {
@@ -103,6 +105,22 @@ const Header = () => {
                                             Calendar
                                         </a>
                                     </Link>
+                                    {
+                                        session == null &&
+                                        <Link href="/api/auth/signin">
+                                            <a className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                                                Login
+                                            </a>
+                                        </Link>
+                                    }
+                                    {
+                                        session &&
+                                        <Link href="/api/auth/signout">
+                                            <button onClick={() => signOut()} className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                                                Logout
+                                            </button>
+                                        </Link>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -226,6 +244,22 @@ const Header = () => {
                                 Calendar
                             </a>
                         </Link>
+                        {
+                            session == null &&
+                            <Link href="/api/auth/signin">
+                                <a className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                                    Login
+                                </a>
+                            </Link>
+                        }
+                        {
+                            session &&
+                            <Link href="/api/auth/signout">
+                                <button onClick={() => signOut()} className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                                    Logout
+                                </button>
+                            </Link>
+                        }
                     </div>
                 </div>
             </nav>

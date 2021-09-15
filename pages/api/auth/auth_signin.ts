@@ -10,7 +10,7 @@ const crendetialsAuth: NextApiHandler<User> = (request, response) => {
         const user: User = {
             csrfToken: request.body.csrfToken,
             name: 'el ADMIN',
-            email: request.body.email,
+            email: 'admin@codeland.com',
             image: ''
         }
 

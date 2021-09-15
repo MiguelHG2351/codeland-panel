@@ -1,13 +1,33 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useSession, getSession } from "next-auth/client";
 
 import styles from '../styles'
+
+export async function getServerSideProps(context) {
+    const session = await getSession(context)
+
+    if(session === null) {
+        return {
+            redirect: {
+                destination: '/api/auth/signin',
+                permanent: false
+            }
+        }
+    }
+
+    return {
+        props: {}
+    }
+}
 
 export default function Home() {
     const [data, setData] = useState({ user: [] });
     const [renderData, setRenderData] = useState({ user: [] });
     const router = useRouter();
+    const [ session, loading ] = useSession();
+    console.log(session, loading);
 
     useEffect(async () => {
         const response = await fetch('/api/getUsers')
@@ -48,11 +68,12 @@ export default function Home() {
                 />
             </Head>
             <main className="w-11/12 m-auto mt-5">
-                <input type="text" className="outline-none p-2 rounded-md" onChange={findUser} placeholder="Buscar usuario" />
+                <input type="text" className="outline-none mb-5 p-2 rounded-md" onChange={findUser} placeholder="Buscar usuario" />
+                <p className="text-white font-medium text-xl">Estudiantes totales: {renderData.user.length}</p>
                 <div className="sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
                     {renderData.user.map((item, index) => (
                         <div
-                            className="relative overflow-hidden h-60 flex flex-col justify-end border mt-7 md:mt-0 border-gray-600 rounded-lg shadow-md transform"
+                            className="relative overflow-hidden h-60 flex flex-col justify-end border border-gray-600 rounded-lg shadow-md transform"
                             key={index}
                         >
                             <img
