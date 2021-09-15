@@ -7,5 +7,5 @@ export default async function getUser(req, res) {
     const { id } = req.query;
     const user = await userModel.findOne({ _id: id }).lean();
 
-    res.json({user})
+    res.json(user)
 }

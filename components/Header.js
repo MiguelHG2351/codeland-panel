@@ -78,13 +78,14 @@ const Header = () => {
                             </div>
                             <div className="hidden sm:block sm:ml-6">
                                 <div className="flex space-x-4">
-                                    <a
-                                        href="#"
-                                        className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
-                                        aria-current="page"
-                                    >
-                                        Dashboard
-                                    </a>
+                                    <Link href="/">
+                                        <a
+                                            className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
+                                            aria-current="page"
+                                        >
+                                            Dashboard
+                                        </a>
+                                    </Link>
 
                                     <a
                                         href="#"

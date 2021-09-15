@@ -43,7 +43,6 @@ const options = {
             algorithms: ['HS256']
          },
         encode: async ({ secret, token }) => {
-            console.log(secret, token);
             const jwtClaims = {
                 name: token.name,
                 email: token.email,
@@ -75,7 +74,6 @@ const options = {
             if(user) {
                 return user;
             }
-            console.log(user)
             return await Promise.resolve(token)
         }
     }
