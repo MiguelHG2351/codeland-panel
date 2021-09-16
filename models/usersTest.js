@@ -33,7 +33,8 @@ const userSchema = new mongoose.Schema({
         type: Number,
     },
 }, {
-    timestamps: false
+    timestamps: true,
+    versionKey: false
 })
 
-export default mongoose.models.users || mongoose.model('users', userSchema)
+export default mongoose.models.users_test || mongoose.model('users_test', userSchema)

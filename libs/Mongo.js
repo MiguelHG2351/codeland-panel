@@ -13,7 +13,8 @@ class MongoLib {
         if(!MongoLib.connection) {
             this.connection = mongoose.connect(mongoURI, {
                 useNewUrlParser: true,
-                useUnifiedTopology: true
+                useUnifiedTopology: true,
+                useFindAndModify: false
             });
         }
     }

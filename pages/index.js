@@ -47,7 +47,7 @@ export default function Home() {
     // }
 
     function findUser(e) {
-        setRenderData({ user: data.user.filter(user => user.username.includes(e.target.value)) })
+        setRenderData({ user: data.user.filter(user => user.username.toLowerCase().startsWith(e.target.value.toLowerCase())) })
     }
 
     function openProfile(e) {
@@ -80,7 +80,7 @@ export default function Home() {
                     <input type="text" className="outline-none p-2 rounded-md" onChange={findUser} placeholder="Buscar usuario" />
                     <p className="text-white font-medium text-xl">Estudiantes totales: {renderData.user.length}</p>
                 </div>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-14">
                     {renderData.user.map((item, index) => (
                         <div
                             className="relative card-user shadow-xl overflow-hidden h-64 rounded-lg transform"

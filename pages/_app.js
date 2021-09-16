@@ -1,6 +1,7 @@
 import 'tailwindcss/tailwind.css'
 import Head from 'next/head'
 import { Provider as AuthProvider } from 'next-auth/client'
+import globalStyles from '../styles/global'
 
 // Components
 import Layout from '../components/Layout'
@@ -14,6 +15,9 @@ function myApp({ Component, pageProps }) {
                 </Head>
                 <Layout>
                     <Component {...pageProps} />
+                    <style jsx global>
+                        {globalStyles}
+                    </style>
                 </Layout>
             </AuthProvider>
         </>
